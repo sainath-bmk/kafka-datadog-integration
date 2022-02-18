@@ -5,9 +5,9 @@ VisualStudioVersion = 16.0.31112.23
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KafkaPublisher", "KafkaPublisher\KafkaPublisher.csproj", "{030A0545-51BE-4DB6-A3EC-BCF1FD8619C0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoggerAPI", "StockAPI\LoggerAPI.csproj", "{672C76D7-A0A0-4A29-AD76-A84A8D858259}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoggerAPI", "LoggerAPI\LoggerAPI.csproj", "{672C76D7-A0A0-4A29-AD76-A84A8D858259}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaymentAPI", "PaymentAPI\PaymentAPI.csproj", "{F67CBAF3-E47E-4982-BBA2-1B346498DA5E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderAPI", "OrderAPI\OrderAPI.csproj", "{F67CBAF3-E47E-4982-BBA2-1B346498DA5E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
