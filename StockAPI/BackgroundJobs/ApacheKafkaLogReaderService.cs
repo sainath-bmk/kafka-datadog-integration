@@ -1,8 +1,10 @@
 ﻿using Confluent.Kafka;
 using KafkaPublisher.Contract;
 using KafkaPublisher.Impl;
+using LoggerAPI.Common;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
 using Serilog;
 using System;
 using System.IO;
@@ -58,11 +60,21 @@ namespace PaymentAPI.BackgroundJobs
                             var consumer = consumerBuilder.Consume
                                (cancelToken.Token);
 
-                            var logMessage = consumer.Message.Value;
-
-                            //write the logs to data dog
                             ILogger Logger = LoggerAPI.Common.LoggerExtensions.Logger();
-                            Logger.Information(logMessage);
+                            var order =  JsonConvert.DeserializeObject<Order>(consumer.Message.Value);
+
+                            if(order.Id!=null)
+                            {
+                                Logger.Information("Order created successfully {@order}", order);
+                            }
+                            else
+                            {
+                                var payment = JsonConvert.DeserializeObject<Payment>(consumer.Message.Value);
+                                Logger.Information("Payment finished successfully {@payment}", payment);
+                            }
+                            //write the logs to data dog
+                           
+                           
                         }
                     }
                     catch (OperationCanceledException)

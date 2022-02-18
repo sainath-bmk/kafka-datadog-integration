@@ -31,16 +31,13 @@ namespace OrderAPI.Controllers
         [HttpPost("createorder")]
         public async Task<IActionResult> CreateOrder([FromBody] Order order)
         {
-            //some db operation to create an order
-            var logMessage = "Created {order}" + JsonConvert.SerializeObject(order);
-
+           
             //publish the item in the confluent topic
-            await _messagePubisher.PublishAsync("application-logs", logMessage);
+            await _messagePubisher.PublishAsync("application-logs", JsonConvert.SerializeObject(order));
 
             //doing the payment operation
-            logMessage = "Payment succeded {order}" + JsonConvert.SerializeObject(order);
-
-            await _messagePubisher.PublishAsync("application-logs", logMessage);
+            var payment = new Payment { TransactionId = Guid.NewGuid().ToString() , Status="Sucessful"};
+            await _messagePubisher.PublishAsync("application-logs", JsonConvert.SerializeObject(payment));
 
             return Ok();
         }

@@ -1,4 +1,4 @@
-﻿namespace PaymentAPI.Common
+﻿namespace LoggerAPI.Common
 {
     public class Order
     {
