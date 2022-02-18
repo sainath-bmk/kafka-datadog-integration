@@ -3,10 +3,8 @@ using KafkaPublisher.Contract;
 using KafkaPublisher.Impl;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Newtonsoft.Json;
-using PaymentAPI.Common;
+using Serilog;
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -19,16 +17,15 @@ namespace PaymentAPI.BackgroundJobs
     {
         private readonly IConfiguration _configuration;
         private readonly IHostingEnvironment _hostingEnvironment;
-        private readonly IMessagePubisher _messagePubisher;
+        
 
         private readonly string topic = "application-logs";
         private readonly string groupId = "group1";
 
-        public ApacheKafkaLogReaderService(IConfiguration configuration, IHostingEnvironment hostingEnvironment, IMessagePubisher messagePubisher)
+        public ApacheKafkaLogReaderService(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
             _configuration = configuration;
             _hostingEnvironment = hostingEnvironment;
-            _messagePubisher = messagePubisher;
         }
         public Task StartAsync(CancellationToken cancellationToken)
         {
@@ -60,12 +57,12 @@ namespace PaymentAPI.BackgroundJobs
                         {
                             var consumer = consumerBuilder.Consume
                                (cancelToken.Token);
-                            var orderRequest = JsonConvert.DeserializeObject<Order>(consumer.Message.Value);
 
-                            var logMessage = "Payment succeeded {order}" + JsonConvert.SerializeObject(orderRequest);
+                            var logMessage = consumer.Message.Value;
 
-                            //write an message to payment-rejected topic
-                            _messagePubisher.PublishAsync("application-logs", JsonConvert.SerializeObject(orderRequest));
+                            //write the logs to data dog
+                            ILogger Logger = LoggerAPI.Common.LoggerExtensions.Logger();
+                            Logger.Information(logMessage);
                         }
                     }
                     catch (OperationCanceledException)
